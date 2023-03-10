@@ -19,7 +19,9 @@ def load(
     max_seq_len: int,
     max_batch_size: int,
     quantize: bool,
+    seed: int
 ) -> LLaMA:
+    torch.manual_seed(seed)
     start_time = time.time()
     checkpoints = sorted(Path(ckpt_dir).glob("*.pth"))
 
@@ -89,41 +91,50 @@ def load(
 def main(
     ckpt_dir: str,
     tokenizer_path: str,
-    temperature: float = 0.8,
-    top_p: float = 0.95,
-    repetition_penalty_range: int = 1024,
-    repetition_penalty_slope: float = 0,
-    repetition_penalty: float = 1.15,
+    temperature: float = 0.7,
+    top_p: float = 0.0, #0.95,
+    top_k: int = 40,
+    repetition_penalty: float = (1.0 / 0.85),
     max_seq_len: int = 512,
+    max_gen_len: int = 256,
     max_batch_size: int = 32,
     use_int8: bool = True,
+    seed: int = 1,
+    count: int = 5,
 ):
-    generator = load(ckpt_dir, tokenizer_path, max_seq_len, max_batch_size, use_int8)
+    generator = load(ckpt_dir, tokenizer_path, max_seq_len, max_batch_size, use_int8, seed)
 
-    prompts = [
-        # For these prompts, the expected answer is the natural continuation of the prompt
-        """Welcome.
-The following conversation took place at Harvard University.
-Former Treasurer Secretary Larry Summers invited Ray Dalio, the founder, chairman and
-co-CIO of Bridgewater Associates, the world's largest hedge fund, to discuss Dalio's unique
-views on economics.
+    prompt = input("> ")
+    while prompt:
+        width = 0
+        def callback(text):
+            nonlocal width
+            text = text.replace('\n', '\n\n')
+            chars = []
+            for i, c in enumerate(text):
+                if c == ' ' and width >= 60:
+                    chars.append('\n')
+                    width = 0
+                else:
+                    width += 1
+                    chars.append(c)
+                    if c == '\n':
+                        width = 0
+            text = ''.join(chars)
+            print(text, end='', flush=True)
 
-Dalio:""",
-    ]
-    results = generator.generate(
-        prompts,
-        max_gen_len=1024,
-        temperature=temperature,
-        top_p=top_p,
-        repetition_penalty_range=repetition_penalty_range,
-        repetition_penalty_slope=repetition_penalty_slope,
-        repetition_penalty=repetition_penalty,
-    )
+        text, = generator.generate(
+            [prompt],
+            max_gen_len=max_gen_len,
+            temperature=temperature,
+            top_p=top_p,
+            top_k=top_k,
+            repetition_penalty=repetition_penalty,
+            token_callback=callback
+        )
 
-    for result in results:
-        print(result)
         print("\n==================================\n")
-
+        prompt = input("> ")
 
 if __name__ == "__main__":
     fire.Fire(main)
