@@ -3,6 +3,7 @@
 - with [Shawn Pressers modified sampling](https://github.com/shawwn/llama-dl/issues/1#issuecomment-1458870564)
 - interactive prompting
 - fits max_batch_size=4 in 24G, maybe more
+- `python example.py --ckpt_dir [TARGET_DIR]/13B --tokenizer_path [TARGET_DIR]/tokenizer.model --max_batch_size=4`
 
 ---
 
