@@ -1,3 +1,12 @@
+# LLaMA: INT8 edition modified
+
+- with [Shawn Pressers modified sampling](https://github.com/shawwn/llama-dl/issues/1#issuecomment-1458870564)
+- interactive prompting
+- fits max_batch_size=4 in 24G, maybe more
+- run `bash run.sh` for currently favored params
+
+---
+
 # LLaMA: INT8 edition
 
 This is a fork of the LLaMA code that runs LLaMA-13B
