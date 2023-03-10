@@ -82,8 +82,9 @@ def load(
     model.cuda()
 
     generator = LLaMA(model, tokenizer)
+    params = [e for e in ckpt_dir.split("/") if e][-1]
     print(
-        f"Loaded in {time.time() - start_time:.2f} seconds with {torch.cuda.max_memory_allocated() / 1024 ** 3:.2f} GiB"
+        f"Loaded LLaMA {params} in {time.time() - start_time:.2f} seconds with {torch.cuda.max_memory_allocated() / 1024 ** 3:.2f} GiB"
     )
     return generator
 
@@ -132,7 +133,7 @@ def main(
             repetition_penalty=repetition_penalty,
             token_callback=callback
         )
-
+        
         print("\n==================================\n")
         prompt = input("> ")
 
