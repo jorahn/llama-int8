@@ -100,8 +100,7 @@ def main(
     max_gen_len: int = 256,
     max_batch_size: int = 32,
     use_int8: bool = True,
-    seed: int = 1,
-    count: int = 5,
+    seed: int = 1
 ):
     generator = load(ckpt_dir, tokenizer_path, max_seq_len, max_batch_size, use_int8, seed)
 
