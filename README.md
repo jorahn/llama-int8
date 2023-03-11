@@ -2,9 +2,9 @@
 
 - with [Shawn Pressers modified sampling](https://github.com/shawwn/llama-dl/issues/1#issuecomment-1458870564)
 - interactive prompting
-- 13B fits in 24G with `max_batch_size=16` (~ 21.5G)
+- 13B requires ~21.5G with `max_batch_size=16` and ~ 15.5G with `max_batch_size=1`
+- 7B requires ~ 11.8G with `max_batch_size=16` and ~ 8.4G with `max_batch_size=1`
 - `python example.py --ckpt_dir [TARGET_DIR]/13B --tokenizer_path [TARGET_DIR]/tokenizer.model --max_batch_size=16`
-- 7B fits in 12G with `max_batch_size=16` (~ 11.8G)
 
 ---
 
