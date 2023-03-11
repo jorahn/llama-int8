@@ -2,8 +2,8 @@
 
 - with [Shawn Pressers modified sampling](https://github.com/shawwn/llama-dl/issues/1#issuecomment-1458870564)
 - interactive prompting
-- fits max_batch_size=8 in 24G, bs 16 goes OOM
-- `python example.py --ckpt_dir [TARGET_DIR]/13B --tokenizer_path [TARGET_DIR]/tokenizer.model --max_batch_size=8`
+- fits max_batch_size=16 in 24G (~ 21.5G)
+- `python example.py --ckpt_dir [TARGET_DIR]/13B --tokenizer_path [TARGET_DIR]/tokenizer.model --max_batch_size=16`
 
 ---
 
